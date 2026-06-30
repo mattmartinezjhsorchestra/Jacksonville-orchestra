@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jacksonville Orchestra Programs</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --jhs-red: #C8102E;
+    --jhs-dark: #1a1a1a;
+    --jhs-gray: #4a4a4a;
+    --jhs-light: #f5f5f5;
+    --jhs-gold: #B8963E;
+    --nwpms-teal: #006994;
+    --nwpms-sea: #00A896;
+    --nwpms-foam: #E8F7F5;
+    --nwpms-dark: #003D56;
+    --nwpms-sand: #F4F1E8;
+    --white: #ffffff;
+    --transition: all 0.35s ease;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #1a1a1a;
+    background: #fff;
+    overflow-x: hidden;
+  }
+
+  /* ── STAFF LINES (signature element) ── */
+  .staff-divider {
+    position: relative;
+    height: 32px;
+    margin: 0;
+    overflow: hidden;
+  }
+  .staff-divider::before {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; top: 50%;
+    height: 1px;
+    box-shadow: 0 -8px 0 0 currentColor,
+                0 -4px 0 0 currentColor,
+                0 0px 0 0 currentColor,
+                0 4px 0 0 currentColor,
+                0 8px 0 0 currentColor;
+    opacity: 0.12;
+  }
+  .staff-divider.jhs { color: var(--jhs-red); }
+  .staff-divider.nwpms { color: var(--nwpms-teal); }
+
+  /* ── SITE HEADER ── */
+  .site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--jhs-dark);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--jhs-red);
+    transition: var(--transition);
+  }
+  .site-header.nwpms-active {
+    background: var(--nwpms-dark);
+    border-color: var(--nwpms-teal);
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .site-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  .site-logo span {
+    display: block;
+    font-size: 0.7rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+
+  /* School tabs */
+  .school-tabs {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 4px;
+  }
+  .school-tab {
+    padding: 6px 18px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    color: rgba(255,255,255,0.6);
+    background: transparent;
+  }
+  .school-tab.active-jhs {
+    background: var(--jhs-red);
+    color: #fff;
+  }
+  .school-tab.active-nwpms {
+    background: var(--nwpms-teal);
+    color: #fff;
+  }
+  .school-tab:not(.active-jhs):not(.active-nwpms):hover {
+    color: #fff;
+    background: rgba(255,255,255,0.12);
+  }
+
+  /* Nav links */
+  .site-nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .nav-link {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: var(--transition);
+  }
+  .nav-link:hover { color: #fff; }
+
+  /* ── PAGE SECTIONS ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    padding-top: 64px;
+  }
+  .hero-jhs {
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a0305 50%, #2a0509 100%);
+  }
+  .hero-nwpms {
+    background: linear-gradient(135deg, #001e2c 0%, #003d56 50%, #005a7a 100%);
+  }
+
+  /* Animated staff background */
+  .hero-staff {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .staff-line {
+    position: absolute;
+    left: -5%;
+    right: -5%;
+    height: 1px;
+    opacity: 0.06;
+    animation: staffDrift 18s ease-in-out infinite alternate;
+  }
+  .staff-line:nth-child(1) { top: 30%; animation-delay: 0s; }
+  .staff-line:nth-child(2) { top: 37%; animation-delay: 1s; }
+  .staff-line:nth-child(3) { top: 44%; animation-delay: 0.5s; }
+  .staff-line:nth-child(4) { top: 51%; animation-delay: 1.5s; }
+  .staff-line:nth-child(5) { top: 58%; animation-delay: 0.8s; }
+  @keyframes staffDrift {
+    from { transform: translateX(-2%) scaleY(1); opacity: 0.06; }
+    to   { transform: translateX(2%) scaleY(1.5); opacity: 0.1; }
+  }
+
+  /* Treble clef watermark */
+  .hero-clef {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(200px, 30vw, 400px);
+    line-height: 1;
+    opacity: 0.04;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: #fff;
+    user-select: none;
+    pointer-events: none;
+    animation: clefFloat 8s ease-in-out infinite alternate;
+  }
+  @keyframes clefFloat {
+    from { transform: translateY(-50%) rotate(-2deg); }
+    to   { transform: translateY(-52%) rotate(1deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    width: 100%;
+  }
+  .hero-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::after {
+    content: '';
+    flex: 0 0 48px;
+    height: 1px;
+    background: currentColor;
+  }
+  .hero-jhs .hero-eyebrow { color: var(--jhs-red); }
+  .hero-nwpms .hero-eyebrow { color: var(--nwpms-sea); }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: #fff;
+    margin-bottom: 24px;
+    max-width: 700px;
+  }
+  .hero-title em {
+    font-style: italic;
+    display: block;
+  }
+  .hero-jhs .hero-title em { color: var(--jhs-red); }
+  .hero-nwpms .hero-title em { color: var(--nwpms-sea); }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    margin-bottom: 40px;
+    font-weight: 300;
+    line-height: 1.75;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+  }
+  .btn-primary-jhs {
+    background: var(--jhs-red);
+    color: #fff;
+  }
+  .btn-primary-jhs:hover { background: #a50e26; transform: translateY(-2px); }
+  .btn-primary-nwpms {
+    background: var(--nwpms-teal);
+    color: #fff;
+  }
+  .btn-primary-nwpms:hover { background: #005780; transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent;
+    color: rgba(255,255,255,0.8);
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.6); color: #fff; transform: translateY(-2px); }
+
+  /* Stats bar */
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    flex-wrap: wrap;
+  }
+  .stat-item {}
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+  }
+  .hero-jhs .stat-number { color: var(--jhs-red); }
+  .hero-nwpms .stat-number { color: var(--nwpms-sea); }
+  .stat-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-top: 4px;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 80px 24px;
+  }
+  .section-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .jhs-page .section-eyebrow { color: var(--jhs-red); }
+  .nwpms-page .section-eyebrow { color: var(--nwpms-teal); }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+  }
+  .section-sub {
+    font-size: 1rem;
+    color: #666;
+    max-width: 600px;
+    margin-bottom: 48px;
+    line-height: 1.7;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-card {
+    background: #f8f8f8;
+    border-radius: 12px;
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-card::before {
+    content: '♩';
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 120px;
+    line-height: 1;
+    opacity: 0.05;
+    font-family: serif;
+  }
+  .jhs-page .about-card { border-top: 4px solid var(--jhs-red); }
+  .nwpms-page .about-card { border-top: 4px solid var(--nwpms-teal); }
+  .director-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .director-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .jhs-page .director-title { color: var(--jhs-red); }
+  .nwpms-page .director-title { color: var(--nwpms-teal); }
+  .director-bio {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: #444;
+  }
+  .contact-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+  .jhs-page .contact-icon { background: var(--jhs-red); color: #fff; }
+  .nwpms-page .contact-icon { background: var(--nwpms-teal); color: #fff; }
+
+  .about-text p {
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 16px;
+  }
+  .about-text h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    color: #1a1a1a;
+  }
+  .ensemble-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .ensemble-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #444;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .ensemble-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .jhs-page .ensemble-dot { background: var(--jhs-red); }
+  .nwpms-page .ensemble-dot { background: var(--nwpms-teal); }
+
+  /* ── EVENTS ── */
+  .events-section {
+    background: #f8f8f8;
+  }
+  .jhs-page .events-section { background: #fdf8f8; }
+  .nwpms-page .events-section { background: var(--nwpms-foam); }
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .event-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 28px 24px;
+    border-left: 3px solid transparent;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: var(--transition);
+  }
+  .event-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+  .jhs-page .event-card { border-color: var(--jhs-red); }
+  .nwpms-page .event-card { border-color: var(--nwpms-teal); }
+  .event-date {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .jhs-page .event-date { color: var(--jhs-red); }
+  .nwpms-page .event-date { color: var(--nwpms-teal); }
+  .event-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+  }
+  .event-detail {
+    font-size: 0.85rem;
+    color: #777;
+    line-height: 1.5;
+  }
+  .event-tag {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tag-concert { background: #eef2ff; color: #3730a3; }
+  .tag-audition { background: #fff7ed; color: #c2410c; }
+  .tag-honor { background: #f0fdf4; color: #166534; }
+  .tag-festival { background: #fdf4ff; color: #7e22ce; }
+
+  /* ── HONOR ENSEMBLES ── */
+  .honor-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    background: #f0f0f0;
+    padding: 4px;
+    border-radius: 8px;
+    width: fit-content;
+  }
+  .honor-tab-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: transparent;
+    color: #888;
+    transition: var(--transition);
+  }
+  .honor-tab-btn.active {
+    background: #fff;
+    color: #1a1a1a;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .honor-panel { display: none; }
+  .honor-panel.active { display: block; }
+  .honor-info-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .honor-info-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+  }
+  .honor-info-box .source-link {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .honor-info-box .source-link a {
+    color: inherit;
+    text-decoration: underline;
+  }
+  .honor-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .honor-detail-item {
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: #f8f8f8;
+  }
+  .honor-detail-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 4px;
+  }
+  .honor-detail-value {
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+  .jhs-page .honor-detail-item { border-left: 3px solid var(--jhs-red); }
+  .nwpms-page .honor-detail-item { border-left: 3px solid var(--nwpms-teal); }
+  .honor-notes {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.75;
+    margin-top: 16px;
+  }
+  .honor-notes ul {
+    margin: 8px 0 8px 20px;
+  }
+  .honor-notes li {
+    margin-bottom: 4px;
+  }
+  .honor-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  .jhs-page .honor-cta { color: var(--jhs-red); }
+  .nwpms-page .honor-cta { color: var(--nwpms-teal); }
+  .honor-cta:hover { opacity: 0.75; }
+
+  /* ── SHEET MUSIC / RESOURCES ── */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .resource-card {
+    border-radius: 10px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #efefef;
+    transition: var(--transition);
+    cursor: pointer;
+  }
+  .resource-card:hover { border-color: transparent; box-shadow: 0 6px 20px rgba(0,0,0,0.1); transform: translateY(-2px); }
+  .resource-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 14px;
+  }
+  .jhs-page .resource-icon { background: rgba(200,16,46,0.08); }
+  .nwpms-page .resource-icon { background: rgba(0,105,148,0.08); }
+  .resource-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .resource-desc {
+    font-size: 0.83rem;
+    color: #888;
+    line-height: 1.5;
+  }
+
+  /* ── GALLERY placeholder ── */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 200px;
+    gap: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .gallery-grid.gallery-grid-full .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-grid.gallery-grid-full .gallery-item:nth-child(6) { grid-column: span 2; }
+  .gallery-grid.gallery-grid-full .gallery-item:nth-child(9) { grid-column: span 2; grid-row: span 2; }
+  .gallery-item {
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+    background: #222;
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: var(--transition);
+  }
+  .gallery-item:hover img {
+    transform: scale(1.06);
+  }
+  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-item:nth-child(2) { grid-column: span 1; }
+  .gallery-item:nth-child(3) { grid-column: span 1; }
+  .gallery-label {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    background: rgba(0,0,0,0.5);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+  .jhs-page .gallery-item:nth-child(odd) { background: linear-gradient(135deg, #1a0a0c, #2a0509); }
+  .jhs-page .gallery-item:nth-child(even) { background: linear-gradient(135deg, #1a1a1a, #2a0a0a); }
+  .nwpms-page .gallery-item:nth-child(odd) { background: linear-gradient(135deg, #001e2c, #003d56); }
+  .nwpms-page .gallery-item:nth-child(even) { background: linear-gradient(135deg, #003d56, #005a7a); }
+  .gallery-upload-note {
+    margin-top: 16px;
+    font-size: 0.83rem;
+    color: #999;
+    text-align: center;
+  }
+
+  /* ── JOIN / CONTACT ── */
+  .join-section {}
+  .jhs-page .join-section { background: #1a1a1a; }
+  .nwpms-page .join-section { background: var(--nwpms-dark); }
+  .join-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .join-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .jhs-page .join-title span { color: var(--jhs-red); }
+  .nwpms-page .join-title span { color: var(--nwpms-sea); }
+  .join-desc {
+    color: rgba(255,255,255,0.6);
+    line-height: 1.75;
+    margin-bottom: 32px;
+    font-size: 0.95rem;
+  }
+  .join-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .join-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .jhs-page .step-num { background: var(--jhs-red); color: #fff; }
+  .nwpms-page .step-num { background: var(--nwpms-teal); color: #fff; }
+  .step-text {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+    padding-top: 6px;
+  }
+  .step-text strong { color: #fff; }
+
+  /* Contact form */
+  .contact-form {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 32px;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .contact-form h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 6px;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #fff;
+    transition: var(--transition);
+    outline: none;
+  }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.12);
+  }
+  .form-select option { background: #1a1a1a; color: #fff; }
+  .form-textarea { resize: vertical; min-height: 100px; }
+
+  /* ── FUNDRAISING ── */
+  .fundraising-section { background: #f8f8f8; }
+  .fundraising-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .fund-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .fund-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  .fund-card p {
+    font-size: 0.88rem;
+    color: #777;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .progress-bar {
+    height: 8px;
+    background: #efefef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+  .jhs-page .progress-fill { background: var(--jhs-red); }
+  .nwpms-page .progress-fill { background: var(--nwpms-teal); }
+  .progress-label {
+    font-size: 0.8rem;
+    color: #888;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0d0d0d;
+    padding: 48px 24px 24px;
+    color: rgba(255,255,255,0.5);
+  }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 40px;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .footer-desc {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.4);
+  }
+  .footer-col h4 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 14px;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .footer-links a {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: var(--transition);
+  }
+  .footer-links a:hover { color: rgba(255,255,255,0.8); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-schools {
+    display: flex;
+    gap: 16px;
+  }
+  .school-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-jhs { background: var(--jhs-red); color: #fff; }
+  .badge-nwpms { background: var(--nwpms-teal); color: #fff; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .about-grid, .join-grid, .fundraising-grid, .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-auto-rows: 160px; }
+    .gallery-grid .gallery-item { grid-column: span 1 !important; grid-row: span 1 !important; }
+    .honor-details { grid-template-columns: 1fr; }
+    .site-nav { display: none; }
+    .header-inner { gap: 12px; }
+    .hero-stats { gap: 24px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ HEADER -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <div class="site-logo">
+      Jacksonville Orchestra Programs
+      <span>Onslow County Schools · NC</span>
+    </div>
+    <div class="school-tabs">
+      <button class="school-tab active-jhs" onclick="switchSchool('jhs')" id="tab-jhs">JHS Cardinals</button>
+      <button class="school-tab" onclick="switchSchool('nwpms')" id="tab-nwpms">NWPMS Dolphins</button>
+    </div>
+    <nav class="site-nav">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#events" class="nav-link">Events</a>
+      <a href="#honors" class="nav-link">Honors</a>
+      <a href="#resources" class="nav-link">Resources</a>
+      <a href="#join" class="nav-link">Join</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════ JHS PAGE -->
+<div class="page jhs-page active" id="page-jhs">
+
+  <!-- HERO -->
+  <section class="hero hero-jhs">
+    <div class="hero-staff">
+      <div class="staff-line" style="background: #fff;"></div>
+      <div class="staff-line" style="background: #fff;"></div>
+      <div class="staff-line" style="background: #fff;"></div>
+      <div class="staff-line" style="background: #fff;"></div>
+      <div class="staff-line" style="background: #fff;"></div>
+    </div>
+    <div class="hero-clef">𝄞</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Jacksonville High School · Est. Orchestra Program</div>
+      <h1 class="hero-title">
+        Cardinal<br><em>Orchestra</em>
+      </h1>
+      <p class="hero-desc">Training the next generation of musicians in Jacksonville, NC. Where musical excellence meets Cardinal pride.</p>
+      <div class="hero-actions">
+        <a href="#join" class="btn btn-primary-jhs">Join the Orchestra</a>
+        <a href="#events" class="btn btn-outline">View Concerts & Events</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">IB</div>
+          <div class="stat-label">World School</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">ERO</div>
+          <div class="stat-label">Honor Ensemble</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">NC</div>
+          <div class="stat-label">ASTA All-State</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">MPA</div>
+          <div class="stat-label">Performance Adjudication</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider jhs"></div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-card">
+            <div class="director-name">Matthew Martinez</div>
+            <div class="director-title">Orchestra Director · JHS & NWPMS</div>
+            <p class="director-bio">
+              Mr. Martinez proudly serves as the Orchestra Director for both Jacksonville High School and Northwoods Park Middle School, guiding string students from their first note through advanced honor ensemble performance. A double bassist and music educator originally from Clayton, NC, he has played the double bass for over 15 years and performs extensively throughout North Carolina, Tennessee, and Virginia, including regular appearances with the Johnson City Symphony Orchestra (TN) and past performances with the Asheville Symphony Orchestra (NC). His performance background spans orchestras, historically informed performance (HIP) ensembles, musicals, opera, wind ensembles, and bluegrass groups, and he has tracked movie scores and contemporary music projects at the Robert F. Gilley Recording Studio in Boone, NC.
+              <br><br>
+              Mr. Martinez holds a Bachelor of Music in Instrumental Music Education (2018) and a Master of Music in Double Bass Performance (2020), both from Appalachian State University. Under his direction, the JHS and NWPMS orchestra programs consistently earn high ratings at state adjudication events such as MPA and Music in the Parks, as well as in public performances throughout the community.
+              <br><br>
+              Beyond the orchestra room, Mr. Martinez co-directs the annual spring musical at Jacksonville High School and has conducted productions including <em>Into the Woods</em>, <em>The Addams Family Musical</em>, and <em>Anastasia the Musical</em>. He also performs as a double bassist and electric bassist in local professional productions. He currently resides in Jacksonville, NC, with his wife, Allison, and their three dogs, Athena, Atlas, and Simba.
+            </p>
+            <div class="contact-info">
+              <div class="contact-item">
+                <div class="contact-icon">✉</div>
+                <span><a href="mailto:matthew.martinez@onslow.k12.nc.us" style="color:inherit;text-decoration:none;">matthew.martinez@onslow.k12.nc.us</a></span>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">📞</div>
+                <span>(910) 989-2048 · JHS Main Office</span>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">📱</div>
+                <span>(910) 320-0448 · Director Cell</span>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <span>1021 Henderson Dr, Jacksonville, NC 28540</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-text">
+          <div class="section-eyebrow">About Our Program</div>
+          <h2 class="section-title">JHS Cardinal Orchestra</h2>
+          <p>The Jacksonville High School Orchestra program is committed to providing students with a rigorous and rewarding musical education. As part of one of Onslow County's premier high schools — and North Carolina's only International Baccalaureate high school — our orchestra program reflects that same commitment to excellence.</p>
+          <p>Students in our program develop technical mastery, musical sensitivity, and the discipline that carries into every area of their lives.</p>
+          <h3>Our Ensembles</h3>
+          <ul class="ensemble-list">
+            <li><span class="ensemble-dot"></span>Concert Orchestra (Grades 9–12)</li>
+            <li><span class="ensemble-dot"></span>Symphonic Orchestra (Advanced)</li>
+            <li><span class="ensemble-dot"></span>Chamber Strings</li>
+            <li><span class="ensemble-dot"></span>String Quartet / Small Ensembles</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider jhs"></div>
+
+  <!-- EVENTS -->
+  <section id="events" class="events-section">
+    <div class="section-inner">
+      <div class="section-eyebrow">Calendar</div>
+      <h2 class="section-title">Concerts & Events</h2>
+      <p class="section-sub">Mark your calendars for these important performances and dates. Check back regularly — this section is updated throughout the year.</p>
+      <div class="events-grid">
+        <div class="event-card">
+          <div class="event-date">Fall 2026</div>
+          <div class="event-title">Fall String Concert</div>
+          <div class="event-detail">JHS Auditorium · Evening Performance<br>Open to students, families & community</div>
+          <span class="event-tag tag-concert">Concert</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Sept. 2026 (est.)</div>
+          <div class="event-title">NC-ASTA All-State Application Deadline</div>
+          <div class="event-detail">Student application & recorded audition deadline<br>2026 exact date not yet announced by NC-ASTA</div>
+          <span class="event-tag tag-audition">Auditions</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Oct. 2026 (est.)</div>
+          <div class="event-title">NC-ASTA All-State String Orchestra Festival</div>
+          <div class="event-detail">One-day festival & public performance<br>2026 location/date TBA — 2025 was held at NW Guilford HS</div>
+          <span class="event-tag tag-honor">All-State</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Sept. 2026 (est.)</div>
+          <div class="event-title">Southeast Honors String Festival — Application Deadline</div>
+          <div class="event-detail">Audition recordings due to UNCG School of Music<br>2026 exact date not yet announced</div>
+          <span class="event-tag tag-audition">Auditions</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Oct. 2026 (est.)</div>
+          <div class="event-title">Southeast Honors String Festival</div>
+          <div class="event-detail">Three-day festival hosted by UNCG School of Music<br>2025 was held Oct. 17–19 — 2026 dates TBA</div>
+          <span class="event-tag tag-honor">Honors</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Winter 2026 (est.)</div>
+          <div class="event-title">NCMEA Eastern Regional Orchestra Auditions</div>
+          <div class="event-detail">Onslow County Schools, Eastern Region<br>2026–27 date/location not yet announced by NCMEA — 2025 cycle was held in January</div>
+          <span class="event-tag tag-audition">Auditions</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider jhs"></div>
+
+  <!-- HONOR ENSEMBLES -->
+  <section id="honors">
+    <div class="section-inner">
+      <div class="section-eyebrow">Distinction & Achievement</div>
+      <h2 class="section-title">Honor Ensembles</h2>
+      <p class="section-sub">Our students have the opportunity to audition for prestigious regional and state honor orchestras. Information below is sourced from official organizations and updated regularly.</p>
+
+      <div class="honor-tabs">
+        <button class="honor-tab-btn active" onclick="switchHonorTab('ero', this)">Eastern Regional Orchestra</button>
+        <button class="honor-tab-btn" onclick="switchHonorTab('sehsf', this)">SE Honors String Festival</button>
+        <button class="honor-tab-btn" onclick="switchHonorTab('ncasta', this)">NC-ASTA All-State</button>
+      </div>
+
+      <!-- ERO Panel -->
+      <div class="honor-panel active" id="honor-ero">
+        <div class="honor-info-box">
+          <h3>NCMEA Eastern Regional Orchestra (ERO)</h3>
+          <span class="source-link">Source: <a href="https://www.ncmea.net/sections-2/orchestra/orchestra-events/eastern-region-orchestra/" target="_blank">ncmea.net</a> · <a href="https://sites.google.com/ncmea.net/ncmea-orchestra/events/eastern-region-orchestra" target="_blank">NCMEA Orchestra Site</a></span>
+          <div class="honor-details">
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">2026–27 Audition Date</div>
+              <div class="honor-detail-value">Not yet announced</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Location</div>
+              <div class="honor-detail-value">Not yet announced</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Last Cycle (2025–26)</div>
+              <div class="honor-detail-value">Held in January at Gray's Creek HS, $10–$20 registration</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Eligibility</div>
+              <div class="honor-detail-value">High school students (JHS)</div>
+            </div>
+          </div>
+          <div class="honor-notes">
+            <strong>2026–27 Cycle:</strong> Audition materials, dates, and registration details for the 2026–27 school year have not yet been released by NCMEA as of this update. NCMEA typically publishes the next cycle's repertoire, scales, and registration details in the fall.
+            <br><br>
+            <strong>For reference, 2025–26 Audition Materials were:</strong>
+            <ul>
+              <li>Violin: Bach Concerto No. 1</li>
+              <li>Cello: Vivaldi Sonata No. 1</li>
+              <li>Bass: Vivaldi Sonata No. 5</li>
+            </ul>
+            <strong>2025–26 Scale Requirements (Violin):</strong> C, G, D, A, B♭ Major (3 octaves); F Major (2 octaves); any melodic minor (3 octaves). Slurred 4 notes per bow; arpeggios 3 notes per bow.
+            <br><br>
+            Check back here or with your director closer to the start of the 2026–27 school year for updated requirements.
+          </div>
+          <a href="https://sites.google.com/ncmea.net/ncmea-orchestra/events/eastern-region-orchestra" target="_blank" class="honor-cta">Full ERO Information → ncmea.net ↗</a>
+        </div>
+      </div>
+
+      <!-- SEHSF Panel -->
+      <div class="honor-panel" id="honor-sehsf">
+        <div class="honor-info-box">
+          <h3>Southeast Honors String Festival</h3>
+          <span class="source-link">Source: <a href="https://vpa.uncg.edu/music/degrees-and-programs/music-programs/string-festival/" target="_blank">UNCG College of Visual & Performing Arts</a> — hosted by the UNCG School of Music</span>
+          <div class="honor-details">
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">2025 Festival Dates</div>
+              <div class="honor-detail-value">October 17–19, 2025 (15th Annual)</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Location</div>
+              <div class="honor-detail-value">UNC Greensboro, Greensboro, NC</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Application Deadline</div>
+              <div class="honor-detail-value">Audition recordings due mid-September (e.g., Sept. 18, 2025)</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Cost</div>
+              <div class="honor-detail-value">$65/student (includes Saturday lunch & dinner)</div>
+            </div>
+          </div>
+          <div class="honor-notes">
+            <strong>Eligibility:</strong> Open to students in grades 9–12. JHS has been a participating school in past years of this festival.
+            <br><br>
+            <strong>Format:</strong> An intensive three-day festival conducted by Dr. Jungho Kim, Director of Orchestras at UNCG, with guest artist/clinician sessions. Some students may also be selected for a complimentary private lesson with UNCG string faculty based on their audition recording. The festival concludes with a public concert by the Honors String Orchestra in Tew Recital Hall.
+            <br><br>
+            <strong>2026 dates have not yet been announced</strong> by UNCG as of this update — this section will be updated once the next cycle is published.
+          </div>
+          <a href="https://vpa.uncg.edu/music/degrees-and-programs/music-programs/string-festival/" target="_blank" class="honor-cta">UNCG String Festival Page ↗</a>
+        </div>
+      </div>
+
+      <!-- NC-ASTA Panel -->
+      <div class="honor-panel" id="honor-ncasta">
+        <div class="honor-info-box">
+          <h3>NC-ASTA All-State String Orchestra Festival & Clinic</h3>
+          <span class="source-link">Source: <a href="https://ncasta.wordpress.com/upcoming-events/" target="_blank">ncasta.wordpress.com</a> · NC chapter of the American String Teachers Association</span>
+          <div class="honor-details">
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">2025 Festival Date</div>
+              <div class="honor-detail-value">Saturday, October 4, 2025 (65th Annual)</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Location</div>
+              <div class="honor-detail-value">Northwest Guilford High School, Greensboro, NC</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Application Deadline</div>
+              <div class="honor-detail-value">Typically mid-September (e.g., Sept. 17, 2025)</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Cost</div>
+              <div class="honor-detail-value">$75/student (includes T-shirt, lunch & participation)</div>
+            </div>
+          </div>
+          <div class="honor-notes">
+            <strong>Eligibility:</strong> Open to North Carolina's top string students in grades 5–12, sponsored by a current NC-ASTA member director.
+            <br><br>
+            <strong>Format:</strong> A one-day festival featuring full ensemble rehearsals with a guest conductor, sectionals led by professional musicians, and a public performance — selection based on student application, recorded excerpts, and teacher recommendation.
+            <br><br>
+            <strong>2026 dates have not yet been announced.</strong> This section will be updated as soon as NC-ASTA publishes the next cycle's information.
+            <br><br>
+            <em>Note: this is distinct from the NCMEA/NC Bandmasters-sponsored "NC All-State Orchestra Clinic," a separate event requiring prior Regional Orchestra or All-State Band participation. NC-ASTA's festival is its own standalone audition pathway.</em>
+          </div>
+          <a href="https://ncasta.wordpress.com/upcoming-events/" target="_blank" class="honor-cta">NC-ASTA Upcoming Events ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider jhs"></div>
+
+  <!-- RESOURCES -->
+  <section id="resources">
+    <div class="section-inner">
+      <div class="section-eyebrow">Student & Parent Resources</div>
+      <h2 class="section-title">Sheet Music & Resources</h2>
+      <p class="section-sub">Access music, practice materials, and program resources below. Contact the director to receive current-year sheet music and practice recordings.</p>
+      <div class="resources-grid">
+        <div class="resource-card">
+          <div class="resource-icon">🎵</div>
+          <div class="resource-title">Current Repertoire</div>
+          <div class="resource-desc">Sheet music for the current concert cycle. Contact director for digital copies.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">🎼</div>
+          <div class="resource-title">ERO Audition Materials</div>
+          <div class="resource-desc">Scale sheets, recordings, and audition excerpts for Eastern Regional Orchestra. Via NCMEA.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">🎻</div>
+          <div class="resource-title">Scale Practice Sheets</div>
+          <div class="resource-desc">Major and melodic minor scale sheets organized by instrument and level.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">📋</div>
+          <div class="resource-title">Practice Log Template</div>
+          <div class="resource-desc">Weekly practice tracking sheet for students to document progress and goals.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">📖</div>
+          <div class="resource-title">Orchestra Handbook</div>
+          <div class="resource-desc">Program policies, expectations, grading, and important information for students and families.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">🔗</div>
+          <div class="resource-title">Helpful Links</div>
+          <div class="resource-desc">SmartMusic, Naxos Music Library, NCMEA, NC-ASTA, and other tools for student musicians.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider jhs"></div>
+
+  <!-- GALLERY -->
+  <section>
+    <div class="section-inner">
+      <div class="section-eyebrow">Memories</div>
+      <h2 class="section-title">Photo Gallery</h2>
+      <p class="section-sub">Concerts, rehearsals, honor ensembles, and the moments that make music worth making.</p>
+      <div class="gallery-grid gallery-grid-full">
+        <div class="gallery-item"><img src="images/jhs-1.jpg" alt="JHS Orchestra group photo"><div class="gallery-label">All-District Honors Trip</div></div>
+        <div class="gallery-item"><img src="images/jhs-2.jpg" alt="JHS Orchestra rehearsal"><div class="gallery-label">Holiday Rehearsal</div></div>
+        <div class="gallery-item"><img src="images/jhs-3.jpg" alt="Director with JHS Orchestra banner"><div class="gallery-label">Pep Rally Spirit Day</div></div>
+        <div class="gallery-item"><img src="images/jhs-logo.jpg" alt="Jacksonville Cardinal Orchestra logo"><div class="gallery-label">Cardinal Orchestra Crest</div></div>
+        <div class="gallery-item"><img src="images/jhs-4.jpg" alt="JHS Orchestra outdoor performance"><div class="gallery-label">Community Performance</div></div>
+        <div class="gallery-item"><img src="images/jhs-5.jpg" alt="JHS Orchestra holiday market performance"><div class="gallery-label">Downtown Holiday Performance</div></div>
+        <div class="gallery-item"><img src="images/jhs-6.jpg" alt="JHS Orchestra students with reindeer antlers"><div class="gallery-label">Holiday Parade</div></div>
+        <div class="gallery-item"><img src="images/jhs-7.jpg" alt="JHS Orchestra cellos and violins"><div class="gallery-label">Outdoor Ceremony</div></div>
+        <div class="gallery-item"><img src="images/jhs-8.jpg" alt="Director conducting outdoors"><div class="gallery-label">Memorial Ceremony</div></div>
+        <div class="gallery-item"><img src="images/jhs-9.jpg" alt="JHS Orchestra concert on stage"><div class="gallery-label">Auditorium Concert</div></div>
+        <div class="gallery-item"><img src="images/jhs-10.jpg" alt="Chamber strings group with instruments"><div class="gallery-label">Chamber Strings Showcase</div></div>
+        <div class="gallery-item"><img src="images/jhs-11.jpg" alt="Bass and violin players at fountain"><div class="gallery-label">All-District Trip</div></div>
+        <div class="gallery-item"><img src="images/jhs-12.jpg" alt="Orchestra performing on stage with conductor"><div class="gallery-label">Honors Festival Performance</div></div>
+        <div class="gallery-item"><img src="images/jhs-13.jpg" alt="Bass and violin players close-up"><div class="gallery-label">All-District Trip</div></div>
+        <div class="gallery-item"><img src="images/jhs-15.jpg" alt="JHS Orchestra graduation ceremony performance"><div class="gallery-label">Graduation Ceremony</div></div>
+        <div class="gallery-item"><img src="images/jhs-grad.jpg" alt="Director and student at graduation"><div class="gallery-label">Senior Graduation Day</div></div>
+        <div class="gallery-item"><img src="images/jhs-16.jpg" alt="Orchestra students smiling group photo"><div class="gallery-label">Section Outing</div></div>
+        <div class="gallery-item"><img src="images/jhs-cert.jpg" alt="JHS staff with Bright Ideas grant certificates"><div class="gallery-label">Bright Ideas Grant Award</div></div>
+        <div class="gallery-item"><img src="images/jhs-14.jpg" alt="JHS Orchestra group photo on brick walkway"><div class="gallery-label">Festival Trip Group Photo</div></div>
+        <div class="gallery-item"><img src="images/nwpms-1.jpg" alt="JHS students performing for elementary school students"><div class="gallery-label">Parkwood Elementary Recruitment Visit</div></div>
+      </div>
+      <p class="gallery-upload-note">📷 More photos can be added anytime — just send them over and they'll be dropped in with captions.</p>
+    </div>
+  </section>
+
+  <div class="staff-divider jhs"></div>
+
+  <!-- FUNDRAISING -->
+  <section class="fundraising-section">
+    <div class="section-inner">
+      <div class="section-eyebrow">Support the Program</div>
+      <h2 class="section-title">Fundraising & Donations</h2>
+      <p class="section-sub">Your support directly funds student instruments, music, event fees, and travel for honor ensembles.</p>
+      <div class="fundraising-grid">
+        <div class="fund-card">
+          <h3>Instrument Fund</h3>
+          <p>Help provide quality instruments for students who need them. Every student deserves access to a well-maintained instrument.</p>
+          <div class="progress-bar"><div class="progress-fill" style="width: 45%"></div></div>
+          <div class="progress-label"><span>$1,350 raised</span><span>Goal: $3,000</span></div>
+        </div>
+        <div class="fund-card">
+          <h3>Honor Ensemble Fees</h3>
+          <p>Cover audition and participation fees for students accepted to ERO, NC-ASTA All-State, and other honor ensembles.</p>
+          <div class="progress-bar"><div class="progress-fill" style="width: 60%"></div></div>
+          <div class="progress-label"><span>$600 raised</span><span>Goal: $1,000</span></div>
+        </div>
+        <div class="fund-card">
+          <h3>Sheet Music & Materials</h3>
+          <p>Purchase new repertoire, bowing supplies, rosin, and educational materials for all ensembles.</p>
+          <div class="progress-bar"><div class="progress-fill" style="width: 30%"></div></div>
+          <div class="progress-label"><span>$300 raised</span><span>Goal: $1,000</span></div>
+        </div>
+        <div class="fund-card">
+          <h3>Donate Directly</h3>
+          <p>Every contribution, large or small, makes a difference. Donations support all aspects of our orchestra program.</p>
+          <a href="#join" class="btn btn-primary-jhs" style="margin-top: 12px; display: inline-flex;">Contact Director to Donate</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN / CONTACT -->
+  <section id="join" class="join-section">
+    <div class="section-inner">
+      <div class="join-grid">
+        <div>
+          <h2 class="join-title">Ready to Join the<br><span>Cardinal Orchestra?</span></h2>
+          <p class="join-desc">Whether you're a lifelong string player or just beginning, the JHS Orchestra welcomes dedicated students. Here's how to get started.</p>
+          <div class="join-steps">
+            <div class="join-step">
+              <div class="step-num">1</div>
+              <div class="step-text"><strong>Contact the Director</strong><br>Send an email or speak to us before or after school.</div>
+            </div>
+            <div class="join-step">
+              <div class="step-num">2</div>
+              <div class="step-text"><strong>Schedule a Placement Meeting</strong><br>We'll determine the right ensemble for your level.</div>
+            </div>
+            <div class="join-step">
+              <div class="step-num">3</div>
+              <div class="step-text"><strong>Register Through Counselor</strong><br>Add Orchestra to your class schedule through your JHS counselor.</div>
+            </div>
+            <div class="join-step">
+              <div class="step-num">4</div>
+              <div class="step-text"><strong>Get Your Music & Start Playing</strong><br>Welcome to the Cardinal family!</div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>Send Us a Message</h3>
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-input" id="jhs-name" placeholder="Student or Parent name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="jhs-email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Instrument</label>
+            <select class="form-select" id="jhs-instrument">
+              <option value="">Select an instrument</option>
+              <option>Violin</option><option>Viola</option><option>Cello</option><option>Double Bass</option><option>Other / Unsure</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-textarea" id="jhs-message" placeholder="Questions, interest in joining, or anything else..."></textarea>
+          </div>
+          <button class="btn btn-primary-jhs" style="width:100%; justify-content:center;" onclick="sendDirectorEmail('jhs')">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /JHS PAGE -->
+
+
+<!-- ══════════════════════════════════════════ NWPMS PAGE -->
+<div class="page nwpms-page" id="page-nwpms">
+
+  <!-- HERO -->
+  <section class="hero hero-nwpms">
+    <div class="hero-staff">
+      <div class="staff-line" style="background: #fff;"></div>
+      <div class="staff-line" style="background: #fff;"></div>
+      <div class="staff-line" style="background: #fff;"></div>
+      <div class="staff-line" style="background: #fff;"></div>
+      <div class="staff-line" style="background: #fff;"></div>
+    </div>
+    <div class="hero-clef">𝄞</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Northwoods Park Middle School · Dolphin Orchestra</div>
+      <h1 class="hero-title">
+        Dolphin<br><em>Orchestra</em>
+      </h1>
+      <p class="hero-desc">Building young musicians in Jacksonville, NC. The NWPMS Orchestra is where curious students discover their musical voice — and where that voice grows.</p>
+      <div class="hero-actions">
+        <a href="#nwpms-join" class="btn btn-primary-nwpms">Join the Orchestra</a>
+        <a href="#nwpms-events" class="btn btn-outline">View Concerts & Events</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">6–8</div>
+          <div class="stat-label">Grades Served</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">JERO</div>
+          <div class="stat-label">Junior Eastern Regional</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">NC</div>
+          <div class="stat-label">ASTA All-State</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">MPA</div>
+          <div class="stat-label">Performance Adjudication</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider nwpms"></div>
+
+  <!-- ABOUT -->
+  <section id="nwpms-about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-card">
+            <div class="director-name">Matthew Martinez</div>
+            <div class="director-title">Orchestra Director · JHS & NWPMS</div>
+            <p class="director-bio">
+              Mr. Martinez proudly serves as the Orchestra Director for both Northwoods Park Middle School and Jacksonville High School, building the next generation of string musicians from their very first lesson. A double bassist and music educator originally from Clayton, NC, he has played the double bass for over 15 years and performs extensively throughout North Carolina, Tennessee, and Virginia, including regular appearances with the Johnson City Symphony Orchestra (TN) and past performances with the Asheville Symphony Orchestra (NC). His performance background spans orchestras, historically informed performance (HIP) ensembles, musicals, opera, wind ensembles, and bluegrass groups, and he has tracked movie scores and contemporary music projects at the Robert F. Gilley Recording Studio in Boone, NC.
+              <br><br>
+              Mr. Martinez holds a Bachelor of Music in Instrumental Music Education (2018) and a Master of Music in Double Bass Performance (2020), both from Appalachian State University. Under his direction, the NWPMS and JHS orchestra programs consistently earn high ratings at state adjudication events such as MPA and Music in the Parks, as well as in public performances throughout the community.
+              <br><br>
+              Beyond the orchestra room, Mr. Martinez co-directs the annual spring musical at Jacksonville High School and has conducted productions including <em>Into the Woods</em>, <em>The Addams Family Musical</em>, and <em>Anastasia the Musical</em>. He also performs as a double bassist and electric bassist in local professional productions. He currently resides in Jacksonville, NC, with his wife, Allison, and their three dogs, Athena, Atlas, and Simba.
+            </p>
+            <div class="contact-info">
+              <div class="contact-item">
+                <div class="contact-icon">✉</div>
+                <span><a href="mailto:matthew.martinez@onslow.k12.nc.us" style="color:inherit;text-decoration:none;">matthew.martinez@onslow.k12.nc.us</a></span>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">📞</div>
+                <span>(910) 347-1202 · NWPMS Main Office</span>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">📱</div>
+                <span>(910) 320-0448 · Director Cell</span>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <span>904 Sioux Dr., Jacksonville, NC 28540</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="about-text">
+          <div class="section-eyebrow">About Our Program</div>
+          <h2 class="section-title">NWPMS Dolphin Orchestra</h2>
+          <p>The Northwoods Park Middle School Orchestra gives 6th, 7th, and 8th grade students the opportunity to develop real musical skill and artistry. Our Dolphin Orchestra builds the foundation that leads students to JHS and beyond.</p>
+          <p>As an AVID School community, NWPMS values organization, persistence, and high expectations — the same values that define excellent orchestral musicians.</p>
+          <h3>Our Ensembles</h3>
+          <ul class="ensemble-list">
+            <li><span class="ensemble-dot"></span>Beginning Strings (Grade 6)</li>
+            <li><span class="ensemble-dot"></span>Intermediate Orchestra (Grades 6–7)</li>
+            <li><span class="ensemble-dot"></span>Advanced Orchestra (Grades 7–8)</li>
+            <li><span class="ensemble-dot"></span>Small Chamber Ensembles</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider nwpms"></div>
+
+  <!-- EVENTS -->
+  <section id="nwpms-events" class="events-section">
+    <div class="section-inner">
+      <div class="section-eyebrow">Calendar</div>
+      <h2 class="section-title">Concerts & Events</h2>
+      <p class="section-sub">Key performances and dates for the NWPMS Orchestra. Check back regularly for updates throughout the year.</p>
+      <div class="events-grid">
+        <div class="event-card">
+          <div class="event-date">Fall 2026</div>
+          <div class="event-title">Fall String Concert</div>
+          <div class="event-detail">NWPMS Gymnasium/Auditorium<br>Open to all families and community members</div>
+          <span class="event-tag tag-concert">Concert</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Winter 2026–27 (est.)</div>
+          <div class="event-title">Junior Eastern Regional Orchestra Auditions</div>
+          <div class="event-detail">NCMEA Eastern Region<br>2026–27 date/location not yet announced — 2024–25 cycle was held in March</div>
+          <span class="event-tag tag-audition">Auditions</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Sept. 2026 (est.)</div>
+          <div class="event-title">NC-ASTA All-State Application Deadline</div>
+          <div class="event-detail">Student application & recorded audition deadline<br>2026 exact date not yet announced by NC-ASTA</div>
+          <span class="event-tag tag-audition">Auditions</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Oct. 2026 (est.)</div>
+          <div class="event-title">NC-ASTA All-State String Orchestra Festival</div>
+          <div class="event-detail">Open to grades 5–12 sponsored by an NC-ASTA member director<br>2025 was held at NW Guilford HS — 2026 date/location TBA</div>
+          <span class="event-tag tag-honor">All-State</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Spring 2027</div>
+          <div class="event-title">Spring Concert</div>
+          <div class="event-detail">NWPMS Campus<br>All Ensembles Perform · Details TBA</div>
+          <span class="event-tag tag-concert">Concert</span>
+        </div>
+        <div class="event-card">
+          <div class="event-date">Spring 2027</div>
+          <div class="event-title">Eastern MPA — Middle School</div>
+          <div class="event-detail">Music Performance Adjudication<br>Site and date announced by NCMEA</div>
+          <span class="event-tag tag-festival">MPA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider nwpms"></div>
+
+  <!-- HONOR ENSEMBLES -->
+  <section id="nwpms-honors">
+    <div class="section-inner">
+      <div class="section-eyebrow">Distinction & Achievement</div>
+      <h2 class="section-title">Honor Ensembles</h2>
+      <p class="section-sub">NWPMS students can audition for Junior Eastern Regional Orchestra, NC-ASTA All-State, and the Southeast Honors String Festival.</p>
+
+      <div class="honor-tabs">
+        <button class="honor-tab-btn active" onclick="switchHonorTab('jero', this)">Jr. Eastern Regional Orchestra</button>
+        <button class="honor-tab-btn" onclick="switchHonorTab('sehsf2', this)">SE Honors String Festival</button>
+        <button class="honor-tab-btn" onclick="switchHonorTab('ncasta2', this)">NC-ASTA All-State</button>
+      </div>
+
+      <div class="honor-panel active" id="honor-jero">
+        <div class="honor-info-box">
+          <h3>NCMEA Junior Eastern Regional Orchestra (JERO)</h3>
+          <span class="source-link">Source: <a href="https://sites.google.com/ncmea.net/ncmea-orchestra/events/junior-eastern-region-orchestra" target="_blank">NCMEA Orchestra Site</a></span>
+          <div class="honor-details">
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">2026–27 Audition Date</div>
+              <div class="honor-detail-value">Not yet announced</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Location</div>
+              <div class="honor-detail-value">Not yet announced</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Last Cycle (2024–25)</div>
+              <div class="honor-detail-value">Held in March, hosted at Durham School of the Arts</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Eligibility</div>
+              <div class="honor-detail-value">Grades 6–8, with director sponsorship</div>
+            </div>
+          </div>
+          <div class="honor-notes">
+            <p>The Junior Eastern Regional Orchestra is for middle school students in the NCMEA Eastern Region. NWPMS students in grades 6–8 are eligible to audition with director sponsorship.</p>
+            <br>
+            <p><strong>2026–27 audition materials, scale requirements, and registration details have not yet been released</strong> by NCMEA as of this update. NCMEA typically publishes the next cycle's requirements in the fall. Check back here or consult your director for the current year's deadlines.</p>
+          </div>
+          <a href="https://sites.google.com/ncmea.net/ncmea-orchestra/events/junior-eastern-region-orchestra" target="_blank" class="honor-cta">JERO Information → NCMEA ↗</a>
+        </div>
+      </div>
+
+      <div class="honor-panel" id="honor-sehsf2">
+        <div class="honor-info-box">
+          <h3>Southeast Honors String Festival</h3>
+          <span class="source-link">Source: <a href="https://vpa.uncg.edu/music/degrees-and-programs/music-programs/string-festival/" target="_blank">UNCG College of Visual & Performing Arts</a> — hosted by the UNCG School of Music</span>
+          <div class="honor-details">
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">2025 Festival Dates</div>
+              <div class="honor-detail-value">October 17–19, 2025 (15th Annual)</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Location</div>
+              <div class="honor-detail-value">UNC Greensboro, Greensboro, NC</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Eligibility</div>
+              <div class="honor-detail-value">Grades 9–12 (high school students only)</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Cost</div>
+              <div class="honor-detail-value">$65/student (includes Saturday lunch & dinner)</div>
+            </div>
+          </div>
+          <div class="honor-notes">
+            This festival is open to grades 9–12 only, so NWPMS students are not yet eligible to audition — but it's a great goal for students once they reach JHS! The festival is conducted by Dr. Jungho Kim, Director of Orchestras at UNCG, and concludes with a public concert by the Honors String Orchestra.
+            <br><br>
+            <strong>2026 dates have not yet been announced</strong> by UNCG as of this update.
+          </div>
+          <a href="https://vpa.uncg.edu/music/degrees-and-programs/music-programs/string-festival/" target="_blank" class="honor-cta">UNCG String Festival Page ↗</a>
+        </div>
+      </div>
+
+      <div class="honor-panel" id="honor-ncasta2">
+        <div class="honor-info-box">
+          <h3>NC-ASTA All-State String Orchestra Festival & Clinic</h3>
+          <span class="source-link">Source: <a href="https://ncasta.wordpress.com/upcoming-events/" target="_blank">ncasta.wordpress.com</a> · NC chapter of the American String Teachers Association</span>
+          <div class="honor-details">
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">2025 Festival Date</div>
+              <div class="honor-detail-value">Saturday, October 4, 2025 (65th Annual)</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Location</div>
+              <div class="honor-detail-value">Northwest Guilford High School, Greensboro, NC</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Application Deadline</div>
+              <div class="honor-detail-value">Typically mid-September (e.g., Sept. 17, 2025)</div>
+            </div>
+            <div class="honor-detail-item">
+              <div class="honor-detail-label">Cost</div>
+              <div class="honor-detail-value">$75/student (includes T-shirt, lunch & participation)</div>
+            </div>
+          </div>
+          <div class="honor-notes">
+            <strong>NWPMS students in grades 5–8 are eligible!</strong> This is a wonderful opportunity for our top string students to perform alongside peers from across North Carolina in a one-day festival featuring full ensemble rehearsals, sectionals with professional musicians, and a public performance.
+            <br><br>
+            Selection is based on a student application, recorded excerpts, and teacher recommendation. <strong>2026 dates have not yet been announced</strong> by NC-ASTA as of this update — this section will be updated as soon as that information is released.
+          </div>
+          <a href="https://ncasta.wordpress.com/upcoming-events/" target="_blank" class="honor-cta">NC-ASTA Upcoming Events ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider nwpms"></div>
+
+  <!-- RESOURCES -->
+  <section id="nwpms-resources">
+    <div class="section-inner">
+      <div class="section-eyebrow">Student & Parent Resources</div>
+      <h2 class="section-title">Sheet Music & Resources</h2>
+      <p class="section-sub">Practicing at home? Here's everything you need. Contact the director for sheet music and additional materials.</p>
+      <div class="resources-grid">
+        <div class="resource-card">
+          <div class="resource-icon">🎵</div>
+          <div class="resource-title">Current Concert Music</div>
+          <div class="resource-desc">Sheet music for the current cycle. Request digital copies from your director.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">🎼</div>
+          <div class="resource-title">JERO Audition Materials</div>
+          <div class="resource-desc">Scale sheets and audition excerpts for Junior ERO. Via NCMEA and director resources.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">🎻</div>
+          <div class="resource-title">Beginner Method Books</div>
+          <div class="resource-desc">Supplemental method book pages and exercises for beginning strings students.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">📋</div>
+          <div class="resource-title">Practice Log</div>
+          <div class="resource-desc">Weekly practice tracking sheet. Consistent practice is the key to musical growth!</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">📖</div>
+          <div class="resource-title">Orchestra Handbook</div>
+          <div class="resource-desc">Program policies, grading, concert dress code, and expectations for students and families.</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-icon">🔗</div>
+          <div class="resource-title">Online Tools</div>
+          <div class="resource-desc">SmartMusic, YouTube practice videos, Naxos Music Library for student listening.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="staff-divider nwpms"></div>
+
+  <!-- GALLERY -->
+  <section>
+    <div class="section-inner">
+      <div class="section-eyebrow">Memories</div>
+      <h2 class="section-title">Photo Gallery</h2>
+      <p class="section-sub">Concerts, rehearsals, honor ensembles, and the moments that make music worth making.</p>
+      <div class="gallery-grid">
+        <div class="gallery-item">🎻<div class="gallery-label">Spring Concert 2025</div></div>
+        <div class="gallery-item">🎼<div class="gallery-label">JERO 2025</div></div>
+        <div class="gallery-item">🎵<div class="gallery-label">Rehearsal</div></div>
+        <div class="gallery-item">🏆<div class="gallery-label">MPA Performance</div></div>
+        <div class="gallery-item">🎶<div class="gallery-label">Fall Concert</div></div>
+      </div>
+      <p class="gallery-upload-note">📷 Photo placeholders shown above. Claude cannot pull photos directly from Facebook (no login/API access) — please download your favorite photos from the program Facebook page and upload them here, or send direct image files, and they'll be added with captions.</p>
+    </div>
+  </section>
+
+  <div class="staff-divider nwpms"></div>
+
+  <!-- FUNDRAISING -->
+  <section class="fundraising-section">
+    <div class="section-inner">
+      <div class="section-eyebrow">Support the Program</div>
+      <h2 class="section-title">Fundraising & Donations</h2>
+      <p class="section-sub">Your generosity keeps instruments in students' hands and music in our halls. Every dollar goes directly to the program.</p>
+      <div class="fundraising-grid">
+        <div class="fund-card">
+          <h3>Beginner Instrument Fund</h3>
+          <p>Help beginning students access quality instruments to start their musical journey.</p>
+          <div class="progress-bar"><div class="progress-fill" style="width: 35%"></div></div>
+          <div class="progress-label"><span>$700 raised</span><span>Goal: $2,000</span></div>
+        </div>
+        <div class="fund-card">
+          <h3>Honor Ensemble Fees</h3>
+          <p>Cover fees for students accepted to JERO and NC-ASTA All-State so cost is never a barrier.</p>
+          <div class="progress-bar"><div class="progress-fill" style="width: 50%"></div></div>
+          <div class="progress-label"><span>$375 raised</span><span>Goal: $750</span></div>
+        </div>
+        <div class="fund-card">
+          <h3>Sheet Music & Supplies</h3>
+          <p>Purchase new repertoire, rosin, strings, and printed materials for all ensembles.</p>
+          <div class="progress-bar"><div class="progress-fill" style="width: 25%"></div></div>
+          <div class="progress-label"><span>$125 raised</span><span>Goal: $500</span></div>
+        </div>
+        <div class="fund-card">
+          <h3>Donate Directly</h3>
+          <p>Every contribution, large or small, directly supports our young Dolphin musicians.</p>
+          <a href="#nwpms-join" class="btn btn-primary-nwpms" style="margin-top: 12px; display: inline-flex;">Contact Director to Donate</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN / CONTACT -->
+  <section id="nwpms-join" class="join-section">
+    <div class="section-inner">
+      <div class="join-grid">
+        <div>
+          <h2 class="join-title">Ready to Join the<br><span>Dolphin Orchestra?</span></h2>
+          <p class="join-desc">Any 6th, 7th, or 8th grade student with a desire to learn strings is welcome. No prior experience required for beginners!</p>
+          <div class="join-steps">
+            <div class="join-step">
+              <div class="step-num">1</div>
+              <div class="step-text"><strong>Contact the Director</strong><br>Reach out by email or stop by during class time.</div>
+            </div>
+            <div class="join-step">
+              <div class="step-num">2</div>
+              <div class="step-text"><strong>Pick Your Instrument</strong><br>Violin, viola, cello, or bass — we'll help you choose!</div>
+            </div>
+            <div class="join-step">
+              <div class="step-num">3</div>
+              <div class="step-text"><strong>Add Orchestra to Your Schedule</strong><br>Talk to your school counselor about adding orchestra as an elective.</div>
+            </div>
+            <div class="join-step">
+              <div class="step-num">4</div>
+              <div class="step-text"><strong>Start Making Music!</strong><br>Welcome to the Dolphin Orchestra family!</div>
+            </div>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>Send Us a Message</h3>
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-input" id="nwpms-name" placeholder="Student or Parent name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" id="nwpms-email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Grade Level</label>
+            <select class="form-select" id="nwpms-grade">
+              <option value="">Select grade</option>
+              <option>6th Grade</option><option>7th Grade</option><option>8th Grade</option><option>Parent / Guardian</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Instrument Interest</label>
+            <select class="form-select" id="nwpms-instrument">
+              <option value="">Select an instrument</option>
+              <option>Violin</option><option>Viola</option><option>Cello</option><option>Double Bass</option><option>Not sure yet</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-textarea" id="nwpms-message" placeholder="Questions, interest in joining, or anything else..."></textarea>
+          </div>
+          <button class="btn btn-primary-nwpms" style="width:100%; justify-content:center;" onclick="sendDirectorEmail('nwpms')">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /NWPMS PAGE -->
+
+
+<!-- ══════════════════════════════════════════ FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Jacksonville Orchestra Programs</div>
+        <p class="footer-desc">Serving the string music students and families of Jacksonville High School and Northwoods Park Middle School in Onslow County, North Carolina.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#about">About / Director</a></li>
+          <li><a href="#events">Concert Schedule</a></li>
+          <li><a href="#honors">Honor Ensembles</a></li>
+          <li><a href="#resources">Resources</a></li>
+          <li><a href="#join">Join / Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>External Links</h4>
+        <ul class="footer-links">
+          <li><a href="https://jhs.onslow.k12.nc.us" target="_blank">JHS Website ↗</a></li>
+          <li><a href="https://npms.onslow.k12.nc.us" target="_blank">NWPMS Website ↗</a></li>
+          <li><a href="https://www.ncmea.net" target="_blank">NCMEA ↗</a></li>
+          <li><a href="https://ncasta.wordpress.com" target="_blank">NC-ASTA ↗</a></li>
+          <li><a href="https://vpa.uncg.edu/music/degrees-and-programs/music-programs/string-festival/" target="_blank">UNCG String Festival ↗</a></li>
+          <li><a href="https://www.onslow.k12.nc.us" target="_blank">Onslow County Schools ↗</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025–2026 Jacksonville Orchestra Programs · Onslow County Schools, NC</span>
+      <div class="footer-schools">
+        <span class="school-badge badge-jhs">JHS Cardinals</span>
+        <span class="school-badge badge-nwpms">NWPMS Dolphins</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Build and open mailto link from contact form fields
+  function sendDirectorEmail(school) {
+    const directorEmail = 'matthew.martinez@onslow.k12.nc.us';
+    let subject, bodyLines;
+
+    if (school === 'jhs') {
+      const name = document.getElementById('jhs-name').value.trim();
+      const email = document.getElementById('jhs-email').value.trim();
+      const instrument = document.getElementById('jhs-instrument').value;
+      const message = document.getElementById('jhs-message').value.trim();
+
+      subject = 'JHS Cardinal Orchestra — Website Inquiry' + (name ? ' from ' + name : '');
+      bodyLines = [
+        'Name: ' + (name || '(not provided)'),
+        'Email: ' + (email || '(not provided)'),
+        'Instrument: ' + (instrument || '(not provided)'),
+        '',
+        'Message:',
+        message || '(no message entered)'
+      ];
+    } else {
+      const name = document.getElementById('nwpms-name').value.trim();
+      const email = document.getElementById('nwpms-email').value.trim();
+      const grade = document.getElementById('nwpms-grade').value;
+      const instrument = document.getElementById('nwpms-instrument').value;
+      const message = document.getElementById('nwpms-message').value.trim();
+
+      subject = 'NWPMS Dolphin Orchestra — Website Inquiry' + (name ? ' from ' + name : '');
+      bodyLines = [
+        'Name: ' + (name || '(not provided)'),
+        'Email: ' + (email || '(not provided)'),
+        'Grade Level: ' + (grade || '(not provided)'),
+        'Instrument: ' + (instrument || '(not provided)'),
+        '',
+        'Message:',
+        message || '(no message entered)'
+      ];
+    }
+
+    const mailtoUrl = 'mailto:' + directorEmail
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(bodyLines.join('\n'));
+
+    window.location.href = mailtoUrl;
+  }
+
+  // ── School tab switching
+  function switchSchool(school) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + school).classList.add('active');
+
+    const header = document.getElementById('siteHeader');
+    const tabJHS = document.getElementById('tab-jhs');
+    const tabNWPMS = document.getElementById('tab-nwpms');
+
+    if (school === 'jhs') {
+      header.classList.remove('nwpms-active');
+      tabJHS.classList.add('active-jhs');
+      tabJHS.classList.remove('active-nwpms');
+      tabNWPMS.classList.remove('active-jhs', 'active-nwpms');
+    } else {
+      header.classList.add('nwpms-active');
+      tabNWPMS.classList.add('active-nwpms');
+      tabNWPMS.classList.remove('active-jhs');
+      tabJHS.classList.remove('active-jhs', 'active-nwpms');
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Honor ensemble tab switching
+  function switchHonorTab(panelId, btn) {
+    // Deactivate all panels and buttons in the same section
+    const section = btn.closest('section') || btn.closest('.section-inner').parentElement;
+    section.querySelectorAll('.honor-tab-btn').forEach(b => b.classList.remove('active'));
+    section.querySelectorAll('.honor-panel').forEach(p => p.classList.remove('active'));
+
+    btn.classList.add('active');
+    const panel = document.getElementById('honor-' + panelId);
+    if (panel) panel.classList.add('active');
+  }
+
+  // ── Sticky header shadow on scroll
+  window.addEventListener('scroll', () => {
+    const header = document.getElementById('siteHeader');
+    if (window.scrollY > 10) {
+      header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.3)';
+    } else {
+      header.style.boxShadow = 'none';
+    }
+  });
+
+  // ── Smooth section scroll (respect fixed header)
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const offset = 80;
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
